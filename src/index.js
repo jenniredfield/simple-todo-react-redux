@@ -1,12 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Components
+import TodoContainer from "./containers/TodoContainer";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// Redux
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import reducer from "./store/reducer";
+
+// Local Storage helpers
+import { loadState, saveState } from "./helpers/localStorage";
+
+// Throttle
+// Ensures saveState is not called multple times within a given time
+import { throttle } from "lodash";
+
+// Styles
+import "./styles/styles2.css";
+
+const persistedState = loadState();
+
+const store = createStore(reducer, persistedState);
+
+store.subscribe(
+  throttle(() => {
+    saveState({ todos: store.getState().todos, filter: "all" });
+  }, 1000)
+);
+
+function AppWrapper() {
+  return (
+    <div className="App__wrapper">
+      <TodoContainer/>
+    </div>
+  )
+}
+
+const rootElement = document.getElementById("root");
+
+ReactDOM.render(
+  <Provider store={store}>
+    <AppWrapper />
+  </Provider>,
+  rootElement
+);
