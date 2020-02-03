@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Simple Todo list React Redux
+
+I made this Todo list originally on codesandbox.io just to practise React and Redux, hence only 2 commits in this Repo.
 
 ## Available Scripts
 
